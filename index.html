@@ -500,11 +500,19 @@
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 20px 24px;
+            padding: 24px 28px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
             align-items: center;
+        }
+
+        .tap-tempo-hint {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            opacity: 0.7;
+            text-align: center;
+            line-height: 1.4;
         }
 
         .tap-tempo-description {
@@ -517,7 +525,7 @@
 
         .tap-tempo-display {
             font-family: var(--font-mono);
-            font-size: 1.6rem;
+            font-size: 2rem;
             color: var(--text);
         }
 
@@ -525,14 +533,14 @@
             background: var(--surface-light);
             border: 2px solid var(--green);
             color: var(--green-glow);
-            padding: 16px 32px;
-            border-radius: 40px;
+            padding: 24px 48px;
+            border-radius: 50px;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             letter-spacing: 0.05em;
             transition: all var(--transition);
-            min-width: 180px;
+            min-width: 260px;
             touch-action: manipulation;
         }
 
@@ -656,6 +664,20 @@
             </div>
         </div>
 
+        <!-- TAP TEMPO – JETZT ÜBER DEM METRONOM -->
+        <div class="tap-tempo-card">
+            <div class="preset-label" style="align-self:flex-start;">TAP TEMPO</div>
+            <div class="tap-tempo-display" id="tapBpmDisplay">-- BPM</div>
+            <button class="tap-button" id="tapButton">Tippe im Rhythmus</button>
+            <div class="tap-tempo-hint">
+                Erkenne den Geist an seiner Geschwindigkeit – tippe einfach im Takt mit dem Geist.
+            </div>
+            <div class="tap-tempo-description">
+                Tippe 4× oder öfter auf den Button, um das Tempo einzustellen.<br>Zum Neustart „↺ Zurücksetzen“ drücken.
+            </div>
+            <button class="tap-reset" id="tapReset">↺ Zurücksetzen</button>
+        </div>
+
         <div class="metronome-card" id="metronomeCard">
             <div class="metro-header">
                 <div class="metro-title">
@@ -697,16 +719,6 @@
             </div>
         </div>
 
-        <div class="tap-tempo-card">
-            <div class="preset-label" style="align-self:flex-start;">TAP TEMPO</div>
-            <div class="tap-tempo-display" id="tapBpmDisplay">-- BPM</div>
-            <button class="tap-button" id="tapButton">Tippe im Rhythmus</button>
-            <div class="tap-tempo-description">
-                Tippe 4× oder öfter auf den Button, um das Tempo einzustellen.<br>Zum Neustart „↺ Zurücksetzen“ drücken.
-            </div>
-            <button class="tap-reset" id="tapReset">↺ Zurücksetzen</button>
-        </div>
-
         <div class="footer-row">
             <span class="footer-left">Ph45m - Helper-</span>
             <span class="footer-right">© Ph45m (SAE)</span>
@@ -735,40 +747,22 @@
     <script>
         (function() {
             const ghosts = [
-                // Bereichsgeister (Range)
-                { name: 'Thaye (Alt)', bpm: 60, group: 'Thaye', groupMin: 60, groupMax: 165 },
-                { name: 'Hantu (warm)', bpm: 84, group: 'Hantu', groupMin: 84, groupMax: 162 },
-                { name: 'Moroi (normal)', bpm: 90, group: 'Moroi', groupMin: 90, groupMax: 135 },
-                { name: 'Moroi (low San)', bpm: 135, group: 'Moroi', groupMin: 90, groupMax: 135 },
-                { name: 'Hantu (kalt)', bpm: 162, group: 'Hantu', groupMin: 84, groupMax: 162 },
-                { name: 'Thaye (Jung)', bpm: 165, group: 'Thaye', groupMin: 60, groupMax: 165 },
-
-                // Einzelzustände mit mehreren Geschwindigkeiten
                 { name: 'Deogen (nah)', bpm: 24 },
-                { name: 'Deogen (weit)', bpm: 180 },
-                { name: 'Dayan (still)', bpm: 72 },
-                { name: 'Dayan (moving)', bpm: 135 },
-                { name: 'Gallu (langsam)', bpm: 82 },
-                { name: 'Gallu (schnell)', bpm: 118 },
-                { name: 'Jinn (normal)', bpm: 102 },
-                { name: 'Jinn (schnell)', bpm: 150 },
-                { name: 'Kormos (norm)', bpm: 102 },
-                { name: 'Kormos (detected)', bpm: 133 },
-                { name: 'Obambo (ruhig)', bpm: 87 },
-                { name: 'Obambo (wütend)', bpm: 118 },
-                { name: 'Raiju (normal)', bpm: 102 },
-                { name: 'Raiju (schnell)', bpm: 150 },
+                { name: 'Thaye (Alt)', bpm: 60, group: 'Thaye', groupMin: 60, groupMax: 165 },
                 { name: 'Revenant (langsam)', bpm: 60 },
-                { name: 'Revenant (jagend)', bpm: 180 },
+                { name: 'Dayan (still)', bpm: 72 },
+                { name: 'Gallu (langsam)', bpm: 82 },
+                { name: 'Hantu (warm)', bpm: 84, group: 'Hantu', groupMin: 84, groupMax: 162 },
+                { name: 'Obambo (ruhig)', bpm: 87 },
+                { name: 'Moroi (normal)', bpm: 90, group: 'Moroi', groupMin: 90, groupMax: 135 },
                 { name: 'Zwillinge (langsam)', bpm: 90 },
-                { name: 'Zwillinge (schnell)', bpm: 114 },
-
-                // Standardgeister mit 102 bpm
                 { name: 'Aswang', bpm: 92 },
                 { name: 'Banshee', bpm: 102 },
                 { name: 'Dämon', bpm: 102 },
                 { name: 'Gespenst', bpm: 102 },
                 { name: 'Goryo', bpm: 102 },
+                { name: 'Jinn (normal)', bpm: 102 },
+                { name: 'Kormos (norm)', bpm: 102 },
                 { name: 'Mare', bpm: 102 },
                 { name: 'Mimic', bpm: 102 },
                 { name: 'Myling', bpm: 102 },
@@ -777,10 +771,23 @@
                 { name: 'Onryo', bpm: 102 },
                 { name: 'Phantom', bpm: 102 },
                 { name: 'Poltergeist', bpm: 102 },
+                { name: 'Raiju (normal)', bpm: 102 },
                 { name: 'Shade', bpm: 102 },
                 { name: 'Spirit', bpm: 102 },
                 { name: 'Yokai', bpm: 102 },
-                { name: 'Yurei', bpm: 102 }
+                { name: 'Yurei', bpm: 102 },
+                { name: 'Zwillinge (schnell)', bpm: 114 },
+                { name: 'Gallu (schnell)', bpm: 118 },
+                { name: 'Obambo (wütend)', bpm: 118 },
+                { name: 'Kormos (detected)', bpm: 133 },
+                { name: 'Moroi (low San)', bpm: 135, group: 'Moroi', groupMin: 90, groupMax: 135 },
+                { name: 'Dayan (moving)', bpm: 135 },
+                { name: 'Jinn (schnell)', bpm: 150 },
+                { name: 'Raiju (schnell)', bpm: 150 },
+                { name: 'Hantu (kalt)', bpm: 162, group: 'Hantu', groupMin: 84, groupMax: 162 },
+                { name: 'Thaye (Jung)', bpm: 165, group: 'Thaye', groupMin: 60, groupMax: 165 },
+                { name: 'Deogen (weit)', bpm: 180 },
+                { name: 'Revenant (jagend)', bpm: 180 }
             ];
 
             ghosts.sort((a, b) => a.bpm - b.bpm);
@@ -803,7 +810,7 @@
             ];
 
             const BLUTMOND_FACTOR = 1.15;
-            const MAX_BASIS_BPM = 180; // Deogen (weit) und Revenant (jagend) sind 180
+            const MAX_BASIS_BPM = 180;
 
             const stopwatchCard = document.getElementById('stopwatchCard');
             const stopwatchDisplay = document.getElementById('stopwatchDisplay');
