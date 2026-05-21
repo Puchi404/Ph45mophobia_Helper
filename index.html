@@ -552,7 +552,6 @@
             touch-action: manipulation;
         }
 
-        /* IMPRESSUM */
         .legal-section {
             margin-top: 12px;
             padding: 10px 0;
@@ -640,7 +639,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- STOPPUHR -->
         <div class="stopwatch-card neutral-green" id="stopwatchCard" title="Klicken zum Starten / Stoppen">
             <div class="stopwatch-inner">
                 <div class="stopwatch-label-row">
@@ -658,7 +656,6 @@
             </div>
         </div>
 
-        <!-- METRONOM -->
         <div class="metronome-card" id="metronomeCard">
             <div class="metro-header">
                 <div class="metro-title">
@@ -669,15 +666,15 @@
             </div>
 
             <div class="metro-bpm-display">
-                <span id="bpmValue">100</span>
+                <span id="bpmValue">102</span>
                 <span class="bpm-label">BPM</span>
             </div>
 
             <div class="metro-slider-row">
                 <span style="color:var(--text-dim);font-size:0.75rem;">20</span>
-                <input type="range" class="metro-slider" id="bpmSlider" min="20" max="220" value="100" step="1"
+                <input type="range" class="metro-slider" id="bpmSlider" min="20" max="250" value="102" step="1"
                 title="BPM manuell einstellen">
-                <span id="maxBpmLabel" style="color:var(--text-dim);font-size:0.75rem;">220</span>
+                <span id="maxBpmLabel" style="color:var(--text-dim);font-size:0.75rem;">250</span>
             </div>
 
             <div class="preset-section">
@@ -700,7 +697,6 @@
             </div>
         </div>
 
-        <!-- TAP TEMPO -->
         <div class="tap-tempo-card">
             <div class="preset-label" style="align-self:flex-start;">TAP TEMPO</div>
             <div class="tap-tempo-display" id="tapBpmDisplay">-- BPM</div>
@@ -719,7 +715,6 @@
             Feedback &amp; Vorschläge? Schreib mir, Ph45m, im Phasmophobia Deutschland Discord!
         </div>
 
-        <!-- IMPRESSUM -->
         <div class="legal-section">
             <details class="legal-details">
                 <summary>Impressum &amp; Datenschutz</summary>
@@ -740,30 +735,52 @@
     <script>
         (function() {
             const ghosts = [
-                { name: 'Deogen (nah)', bpm: 38 },
-                { name: 'Revenant (langsam)', bpm: 58 },
-                { name: 'Alter Thaye', bpm: 60, group: 'Thaye', groupMin: 60, groupMax: 150 },
-                { name: 'Dayan (still)', bpm: 70 },
-                { name: 'Hantu (warm)', bpm: 80, group: 'Hantu', groupMin: 80, groupMax: 185 },
-                { name: 'Gallu (tired)', bpm: 80 },
-                { name: 'Obambo (calm)', bpm: 85 },
-                { name: 'Aswang', bpm: 90 },
-                { name: 'Standard', bpm: 100 },
-                { name: 'Gallu (normal)', bpm: 100 },
-                { name: 'Kormos (base)', bpm: 100 },
-                { name: 'Moroi (normal)', bpm: 110, group: 'Moroi', groupMin: 110, groupMax: 160 },
-                { name: 'Jinn / Raiju (normal)', bpm: 112 },
-                { name: 'Gallu (enraged)', bpm: 115 },
-                { name: 'Obambo (aggressive)', bpm: 115 },
-                { name: 'Kormos (detected)', bpm: 130 },
-                { name: 'Dayan (moving)', bpm: 132 },
-                { name: 'Junger Thaye', bpm: 150, group: 'Thaye', groupMin: 60, groupMax: 150 },
-                { name: 'Moroi (low San)', bpm: 160, group: 'Moroi', groupMin: 110, groupMax: 160 },
-                { name: 'Jinn / Raiju (schnell)', bpm: 162 },
+                // Bereichsgeister (Range)
+                { name: 'Thaye (Alt)', bpm: 60, group: 'Thaye', groupMin: 60, groupMax: 165 },
+                { name: 'Hantu (warm)', bpm: 84, group: 'Hantu', groupMin: 84, groupMax: 162 },
+                { name: 'Moroi (normal)', bpm: 90, group: 'Moroi', groupMin: 90, groupMax: 135 },
+                { name: 'Moroi (low San)', bpm: 135, group: 'Moroi', groupMin: 90, groupMax: 135 },
+                { name: 'Hantu (kalt)', bpm: 162, group: 'Hantu', groupMin: 84, groupMax: 162 },
+                { name: 'Thaye (Jung)', bpm: 165, group: 'Thaye', groupMin: 60, groupMax: 165 },
+
+                // Einzelzustände mit mehreren Geschwindigkeiten
+                { name: 'Deogen (nah)', bpm: 24 },
+                { name: 'Deogen (weit)', bpm: 180 },
+                { name: 'Dayan (still)', bpm: 72 },
+                { name: 'Dayan (moving)', bpm: 135 },
+                { name: 'Gallu (langsam)', bpm: 82 },
+                { name: 'Gallu (schnell)', bpm: 118 },
+                { name: 'Jinn (normal)', bpm: 102 },
+                { name: 'Jinn (schnell)', bpm: 150 },
+                { name: 'Kormos (norm)', bpm: 102 },
+                { name: 'Kormos (detected)', bpm: 133 },
+                { name: 'Obambo (ruhig)', bpm: 87 },
+                { name: 'Obambo (wütend)', bpm: 118 },
+                { name: 'Raiju (normal)', bpm: 102 },
+                { name: 'Raiju (schnell)', bpm: 150 },
+                { name: 'Revenant (langsam)', bpm: 60 },
                 { name: 'Revenant (jagend)', bpm: 180 },
-                { name: 'Deogen (weit)', bpm: 182 },
-                { name: 'Hantu (kalt)', bpm: 185, group: 'Hantu', groupMin: 80, groupMax: 185 },
-                { name: 'Kormos (max)', bpm: 215 }
+                { name: 'Zwillinge (langsam)', bpm: 90 },
+                { name: 'Zwillinge (schnell)', bpm: 114 },
+
+                // Standardgeister mit 102 bpm
+                { name: 'Aswang', bpm: 92 },
+                { name: 'Banshee', bpm: 102 },
+                { name: 'Dämon', bpm: 102 },
+                { name: 'Gespenst', bpm: 102 },
+                { name: 'Goryo', bpm: 102 },
+                { name: 'Mare', bpm: 102 },
+                { name: 'Mimic', bpm: 102 },
+                { name: 'Myling', bpm: 102 },
+                { name: 'Obake', bpm: 102 },
+                { name: 'Oni', bpm: 102 },
+                { name: 'Onryo', bpm: 102 },
+                { name: 'Phantom', bpm: 102 },
+                { name: 'Poltergeist', bpm: 102 },
+                { name: 'Shade', bpm: 102 },
+                { name: 'Spirit', bpm: 102 },
+                { name: 'Yokai', bpm: 102 },
+                { name: 'Yurei', bpm: 102 }
             ];
 
             ghosts.sort((a, b) => a.bpm - b.bpm);
@@ -785,8 +802,8 @@
                 { label: '150%', factor: 1.5 }
             ];
 
-            const BLUTMOND_FACTOR = 1.5;
-            const MAX_BASIS_BPM = 215;
+            const BLUTMOND_FACTOR = 1.15;
+            const MAX_BASIS_BPM = 180; // Deogen (weit) und Revenant (jagend) sind 180
 
             const stopwatchCard = document.getElementById('stopwatchCard');
             const stopwatchDisplay = document.getElementById('stopwatchDisplay');
@@ -916,12 +933,12 @@
             });
 
             let metroActive = false;
-            let metroBPM = 100;
+            let metroBPM = 102;
             let metroInterval = null;
             let audioCtx = null;
             let metroWasActiveBeforeSlider = false;
 
-            let selectedGhostBasis = 100;
+            let selectedGhostBasis = 102;
             let selectedSpeedFactor = 1.0;
             let blutmondActive = false;
             let manualOverride = false;
@@ -1268,7 +1285,6 @@
                 }
             });
 
-            // ---------- TAP TEMPO ----------
             let tapTimes = [];
             const MAX_TAPS = 8;
 
@@ -1307,7 +1323,7 @@
             function initialize() {
                 buildGhostButtons();
                 buildSpeedButtons();
-                selectedGhostBasis = 100;
+                selectedGhostBasis = 102;
                 selectedSpeedFactor = 1.0;
                 blutmondActive = false;
                 blutmondToggle.textContent = '🌕 Aus';
